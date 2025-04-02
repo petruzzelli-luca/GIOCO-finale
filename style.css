@@ -1,13 +1,15 @@
-canvas {
-    border:1px solid #d3d3d3;
-    background-color: #f1f1f1;
-    width: 50%;
-    height: 600px;
-    background-color: orange;
+body {
+    margin: 0;
+    height: 100vh; /* Usa l'intera altezza della finestra */
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
 }
 
-body {
-    display:flex;
-    align-items: center;
-    justify-items: center;
+/* Stili per il canvas */
+canvas {
+    border: 8px solid #d3d3d3;
+    background-color: orange; /* Sfondo del canvas */
+    width: 50%; /* Larghezza del canvas (50% della larghezza del body) */
+    height: 600px; /* Altezza fissa del canvas */
 }
