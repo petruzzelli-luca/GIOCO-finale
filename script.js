@@ -96,20 +96,20 @@ function updateGameArea() {
     myGamePiece.speedY = 0;
 
     // Controlla se il personaggio ha raggiunto la metà della canvas
-    if (myGamePiece.x >= myGameArea.canvas.width / 2) {
-        // Se è passato metà canvas, può solo andare indietro
+    if (myGamePiece.x >= (myGameArea.canvas.width / 2)) {
+        // Se è passato metà canvas, può solo andare indietro, ma la sua animazione continua
         if (myGameArea.keys["ArrowLeft"]) {
             myGamePiece.speedX = -1;
-            myGamePiece.imageList = myGamePiece.imageListRunning; // Cambia l'animazione a "running" verso sinistra
+            myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a sinistra
         }
     } else {
         // Se il personaggio non ha raggiunto metà canvas, può andare a destra o a sinistra
         if (myGameArea.keys["ArrowLeft"]) { // Movimento verso sinistra
             myGamePiece.speedX = -1;
-            myGamePiece.imageList = myGamePiece.imageListRunning; // Cambia l'animazione a "running" verso sinistra
+            myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a sinistra
         } else if (myGameArea.keys["ArrowRight"]) { // Movimento verso destra
             myGamePiece.speedX = 1;
-            myGamePiece.imageList = myGamePiece.imageListRunning; // Cambia l'animazione a "running" verso destra
+            myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a destra
         }
     }
 
@@ -122,6 +122,3 @@ function updateGameArea() {
     myGamePiece.update();
     myGameArea.drawGameObject(myGamePiece);
 }
-
-
-
