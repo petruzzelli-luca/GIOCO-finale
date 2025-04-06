@@ -10,7 +10,7 @@ var myGamePiece = {
     width: 60,
     height: 60,
     x: 10,
-    y: 120,
+    y: 174,
     imageList: [],
     imageListRunning: [],
     imageListIdle: [],
@@ -66,6 +66,18 @@ var myGameArea = {
         this.context = this.canvas.getContext("2d");
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+
+        var immagine = new Image();
+        immagine.onload = function() {
+            // Disegna solo metà immagine (orizzontale)
+            const halfWidth = immagine.width / 2;
+            context.drawImage(
+            immagine,
+            0, 0, halfWidth, immagine.height,     // sorgente: metà sinistra
+            0, 0, canvas.width, canvas.height     // destinazione: tutto il canvas
+            );
+        };
+        immagine.src = "sfondo gioco.webp";
 
         this.interval = setInterval(updateGameArea, 8); // Impostato a 20ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
