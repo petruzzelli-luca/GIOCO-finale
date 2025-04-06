@@ -54,7 +54,7 @@ var myGamePiece = {
 };
 
 var myGameArea = {
-    canvas: document.getElementById("myCanvas"), // Ottieni il canvas dal DOM
+    canvas: document.getElementById("myCanvas"), 
     context: null,
     interval: null,
     keys: [], // Array per tenere traccia dei tasti premuti
@@ -64,9 +64,10 @@ var myGameArea = {
         this.canvas.width = 480;
         this.canvas.height = 270;
         this.context = this.canvas.getContext("2d");
+
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
-        this.interval = setInterval(updateGameArea, 20); // Impostato a 20ms per migliorare il controllo
+        this.interval = setInterval(updateGameArea, 8); // Impostato a 20ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
             myGameArea.keys[e.key] = true;
         });
@@ -102,6 +103,8 @@ function updateGameArea() {
             myGamePiece.speedX = -1;
             myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a sinistra
         }
+
+        
     } else {
         // Se il personaggio non ha raggiunto metà canvas, può andare a destra o a sinistra
         if (myGameArea.keys["ArrowLeft"]) { // Movimento verso sinistra
@@ -117,6 +120,8 @@ function updateGameArea() {
     if (!myGameArea.keys["ArrowLeft"] && !myGameArea.keys["ArrowRight"]) {
         myGamePiece.speedX = 0; // Ferma il movimento
         myGamePiece.imageList = myGamePiece.imageListIdle; // Cambia l'animazione a "idle"
+    }else{
+        myGamePiece.imageList = myGamePiece.imageListRunning;
     }
 
     myGamePiece.update();
