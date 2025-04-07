@@ -3,6 +3,7 @@ function startGame() {
     myGameArea.start();
 }
 
+var specchia_immagine = false; // Flag per specchiare l'immagine
 
 var myGamePiece = {
     speedX: 0,
@@ -54,7 +55,7 @@ var myGamePiece = {
 };
 
 var myGameArea = {
-    canvas: document.getElementById("myCanvas"), 
+    canvas: document.getElementById("myCanvas"),
     context: null,
     interval: null,
     keys: [], // Array per tenere traccia dei tasti premuti
@@ -66,7 +67,6 @@ var myGameArea = {
         this.context = this.canvas.getContext("2d");
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-
 
         this.interval = setInterval(updateGameArea, 8); // Impostato a 20ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
@@ -82,13 +82,26 @@ var myGameArea = {
     },
 
     drawGameObject: function (gameObject) {
-        this.context.drawImage(
-            gameObject.image,
-            gameObject.x,
-            gameObject.y,
-            gameObject.width,
-            gameObject.height
-        );
+        if (specchia_immagine) {
+            this.context.save();
+            this.context.scale(-1, 1);
+            this.context.drawImage(
+                gameObject.image,
+                -gameObject.x - gameObject.width,
+                gameObject.y,
+                gameObject.width,
+                gameObject.height
+            );
+            this.context.restore();
+        } else {
+            this.context.drawImage(
+                gameObject.image,
+                gameObject.x,
+                gameObject.y,
+                gameObject.width,
+                gameObject.height
+            );
+        }
     }
 };
 
@@ -102,31 +115,27 @@ function updateGameArea() {
         // Se è passato metà canvas, può solo andare indietro, ma la sua animazione continua
         if (myGameArea.keys["ArrowLeft"]) {
             myGamePiece.speedX = -1;
-            myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a sinistra
+            myGamePiece.imageList = myGamePiece.imageListRunning;
+            specchia_immagine = true;
         }
-
-        
     } else {
         // Se il personaggio non ha raggiunto metà canvas, può andare a destra o a sinistra
-        if (myGameArea.keys["ArrowLeft"]) { // Movimento verso sinistra
+        if (myGameArea.keys["ArrowLeft"]) {
             myGamePiece.speedX = -1;
-            myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a sinistra
-            specchia_immagine=true
-        } else if (myGameArea.keys["ArrowRight"]) { // Movimento verso destra
+            myGamePiece.imageList = myGamePiece.imageListRunning;
+            specchia_immagine = true;
+        } else if (myGameArea.keys["ArrowRight"]) {
             myGamePiece.speedX = 1;
-            myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a destra
-        }
-
-        if (specchia_immagine==true){
-            
+            myGamePiece.imageList = myGamePiece.imageListRunning;
+            specchia_immagine = false;
         }
     }
 
     // Se nessun tasto è premuto, metti il personaggio in modalità idle
     if (!myGameArea.keys["ArrowLeft"] && !myGameArea.keys["ArrowRight"]) {
-        myGamePiece.speedX = 0; // Ferma il movimento
-        myGamePiece.imageList = myGamePiece.imageListIdle; // Cambia l'animazione a "idle"
-    }else{
+        myGamePiece.speedX = 0;
+        myGamePiece.imageList = myGamePiece.imageListIdle;
+    } else {
         myGamePiece.imageList = myGamePiece.imageListRunning;
     }
 
