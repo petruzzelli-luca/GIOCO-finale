@@ -111,9 +111,14 @@ function updateGameArea() {
         if (myGameArea.keys["ArrowLeft"]) { // Movimento verso sinistra
             myGamePiece.speedX = -1;
             myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a sinistra
+            specchia_immagine=true
         } else if (myGameArea.keys["ArrowRight"]) { // Movimento verso destra
             myGamePiece.speedX = 1;
             myGamePiece.imageList = myGamePiece.imageListRunning; // Continua l'animazione "running" a destra
+        }
+
+        if (specchia_immagine==true){
+            
         }
     }
 
