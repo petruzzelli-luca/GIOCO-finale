@@ -1,3 +1,4 @@
+// Funzione per avviare il gioco
 function startGame() {
     myGamePiece.loadImages(runningImages, idleImage, jumpImage, deadImage);
     myGameArea.start();
@@ -60,6 +61,8 @@ var myGameArea = {
     interval: null,
     keys: [], // Array per tenere traccia dei tasti premuti
     background: null, // Proprietà per lo sfondo
+    backgroundX: 0, // Posizione orizzontale dello sfondo
+    backgroundSpeed: 1, // Velocità dello sfondo
 
     start: function () {
         this.canvas.width = 480;
@@ -67,6 +70,10 @@ var myGameArea = {
         this.context = this.canvas.getContext("2d");
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+
+        // Carica l'immagine di sfondo
+        this.background = new Image();
+        this.background.src = "sfondo_gioco (1).jpg"; // Sostituisci con il percorso della tua immagine
 
         this.interval = setInterval(updateGameArea, 8); // Impostato a 20ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
@@ -78,7 +85,28 @@ var myGameArea = {
     },
 
     clear: function () {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        // Disegna lo sfondo con scorrimento
+        if (this.background) {
+            this.context.drawImage(this.background, this.backgroundX, 0, this.canvas.width, this.canvas.height);
+            this.context.drawImage(this.background, this.backgroundX + this.canvas.width, 0, this.canvas.width, this.canvas.height);
+
+            // Ripristina la posizione dello sfondo per creare un loop continuo
+            if (this.backgroundX <= -this.canvas.width) {
+                this.backgroundX = 0;
+            }
+        } else {
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+    },
+
+    updateBackground: function () {
+        // Sposta lo sfondo solo se il personaggio ha raggiunto la metà della canvas
+        if (myGamePiece.x >= (this.canvas.width / 2) && myGamePiece.imageList == myGamePiece.imageListRunning) {
+            this.backgroundX -= this.backgroundSpeed;
+        }
+        if(myGamePiece.x <=100 && myGamePiece.imageList == myGamePiece.imageListRunning && specchia_immagine==true){
+            this.backgroundX += this.backgroundSpeed;
+        }
     },
 
     drawGameObject: function (gameObject) {
@@ -139,6 +167,14 @@ function updateGameArea() {
         myGamePiece.imageList = myGamePiece.imageListRunning;
     }
 
+    // Aggiorna lo sfondo
+    myGameArea.updateBackground();
+
     myGamePiece.update();
     myGameArea.drawGameObject(myGamePiece);
 }
+
+// Avvia il gioco quando il DOM è pronto
+document.addEventListener("DOMContentLoaded", function () {
+    startGame();
+});

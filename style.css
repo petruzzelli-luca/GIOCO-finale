@@ -9,8 +9,6 @@ body {
 /* Stili per il canvas */
 canvas {
     border: 12px solid #d3d3d3;
-    background-image: url("sfondo_gioco (1).jpg");
-    background-size: cover;
     width: 50%; /* Larghezza del canvas (50% della larghezza del body) */
     height: 600px; /* Altezza fissa del canvas */
 }
