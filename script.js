@@ -104,7 +104,7 @@ var myGameArea = {
         if (myGamePiece.x >= (this.canvas.width / 2) && myGamePiece.imageList == myGamePiece.imageListRunning) {
             this.backgroundX -= this.backgroundSpeed;
         }
-        if(myGamePiece.x <=100 && myGamePiece.imageList == myGamePiece.imageListRunning && specchia_immagine==true){
+        if(myGamePiece.x <=100 && myGamePiece.imageList == myGamePiece.imageListRunning && specchia_immagine==true && this.backgroundX < 0){
             this.backgroundX += this.backgroundSpeed;
         }
     },
@@ -163,8 +163,6 @@ function updateGameArea() {
     if (!myGameArea.keys["ArrowLeft"] && !myGameArea.keys["ArrowRight"]) {
         myGamePiece.speedX = 0;
         myGamePiece.imageList = myGamePiece.imageListIdle;
-    } else {
-        myGamePiece.imageList = myGamePiece.imageListRunning;
     }
 
     // Aggiorna lo sfondo
