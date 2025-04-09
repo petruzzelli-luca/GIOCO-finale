@@ -6,7 +6,7 @@ body {
     align-items: center; /* Centra verticalmente */
 }
 
-/* Stili per il canvas */
+
 canvas {
     border: 12px solid #d3d3d3;
     width: 50%; /* Larghezza del canvas (50% della larghezza del body) */

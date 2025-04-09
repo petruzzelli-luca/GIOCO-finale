@@ -4,7 +4,7 @@ function startGame() {
     myGameArea.start();
 }
 
-var specchia_immagine = false; // Flag per specchiare l'immagine
+var specchia_immagine = false; 
 
 var myGamePiece = {
     speedX: 0,
@@ -75,7 +75,7 @@ var myGameArea = {
         this.background = new Image();
         this.background.src = "sfondo_gioco (1).jpg"; // Sostituisci con il percorso della tua immagine
 
-        this.interval = setInterval(updateGameArea, 8); // Impostato a 20ms per migliorare il controllo
+        this.interval = setInterval(updateGameArea, 8); // Impostato a 8ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
             myGameArea.keys[e.key] = true;
         });
@@ -104,7 +104,7 @@ var myGameArea = {
         if (myGamePiece.x >= (this.canvas.width / 2) && myGamePiece.imageList == myGamePiece.imageListRunning) {
             this.backgroundX -= this.backgroundSpeed;
         }
-        if(myGamePiece.x <=100 && myGamePiece.imageList == myGamePiece.imageListRunning && specchia_immagine==true && this.backgroundX < 0){
+        if(myGamePiece.x <=80 && myGamePiece.imageList == myGamePiece.imageListRunning && specchia_immagine==true && this.backgroundX < 0){
             this.backgroundX += this.backgroundSpeed;
         }
     },
@@ -149,7 +149,10 @@ function updateGameArea() {
     } else {
         // Se il personaggio non ha raggiunto metà canvas, può andare a destra o a sinistra
         if (myGameArea.keys["ArrowLeft"]) {
-            myGamePiece.speedX = -1;
+            // Impedisce al personaggio di andare indietro se x == 100 e specchia_immagine == true
+            if (!(myGamePiece.x == 80 && specchia_immagine==true)) {
+                myGamePiece.speedX = -1;
+            }
             myGamePiece.imageList = myGamePiece.imageListRunning;
             specchia_immagine = true;
         } else if (myGameArea.keys["ArrowRight"]) {
@@ -158,6 +161,9 @@ function updateGameArea() {
             specchia_immagine = false;
         }
     }
+
+
+
 
     // Se nessun tasto è premuto, metti il personaggio in modalità idle
     if (!myGameArea.keys["ArrowLeft"] && !myGameArea.keys["ArrowRight"]) {
@@ -172,7 +178,7 @@ function updateGameArea() {
     myGameArea.drawGameObject(myGamePiece);
 }
 
-// Avvia il gioco quando il DOM è pronto
+// Avvia il gioco quando il DOM ha finito di caricarsi
 document.addEventListener("DOMContentLoaded", function () {
     startGame();
 });
