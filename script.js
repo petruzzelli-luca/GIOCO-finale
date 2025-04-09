@@ -140,28 +140,32 @@ function updateGameArea() {
 
     // Controlla se il personaggio ha raggiunto la metà della canvas
     if (myGamePiece.x >= (myGameArea.canvas.width / 2)) {
-        // Se è passato metà canvas, può solo andare indietro, ma la sua animazione continua
+        myGamePiece.x = myGameArea.canvas.width / 2;   // Blocca il personaggio a metà canvas
+
         if (myGameArea.keys["ArrowLeft"]) {
             myGamePiece.speedX = -1;
             myGamePiece.imageList = myGamePiece.imageListRunning;
             specchia_immagine = true;
+        } else if (myGameArea.keys["ArrowRight"]) {
+            myGamePiece.imageList = myGamePiece.imageListRunning;
+            specchia_immagine = false;
         }
     } else {
         // Se il personaggio non ha raggiunto metà canvas, può andare a destra o a sinistra
         if (myGameArea.keys["ArrowLeft"]) {
-            // Impedisce al personaggio di andare indietro se x == 100 e specchia_immagine == true
-            if (!(myGamePiece.x == 80 && specchia_immagine==true)) {
+            // Impedisce al personaggio di andare indietro se x == 80 e specchia_immagine == true
+            if (!(myGamePiece.x == 80 && specchia_immagine == true)) {
                 myGamePiece.speedX = -1;
             }
             myGamePiece.imageList = myGamePiece.imageListRunning;
             specchia_immagine = true;
-        } else if (myGameArea.keys["ArrowRight"]) {
+        } 
+        if (myGameArea.keys["ArrowRight"]) {
             myGamePiece.speedX = 1;
             myGamePiece.imageList = myGamePiece.imageListRunning;
-            specchia_immagine = false;
+            specchia_immagine = false; 
         }
     }
-
 
 
 
