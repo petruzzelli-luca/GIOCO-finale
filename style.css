@@ -4,11 +4,62 @@ body {
     display: flex;
     justify-content: center; /* Centra orizzontalmente */
     align-items: center; /* Centra verticalmente */
+    background: linear-gradient(to bottom, #87CEEB, #4682B4); /* Sfondo sfumato */
+    font-family: 'Arial', sans-serif;
+    color: #fff;
 }
 
-
 canvas {
-    border: 12px solid #d3d3d3;
-    width: 50%; /* Larghezza del canvas (50% della larghezza del body) */
-    height: 600px; /* Altezza fissa del canvas */
+    border: 8px solid #FFD700; /* Bordo dorato */
+    border-radius: 15px; /* Angoli arrotondati */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Ombra */
+    width: 60%; /* Larghezza del canvas */
+    height: 70%; /* Altezza del canvas */
+}
+
+#menu {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7); /* Sfondo semi-trasparente */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+#menu h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #FFD700; /* Colore dorato */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Ombra del testo */
+}
+
+#menu select, #menu button {
+    font-size: 1.2em;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #FFD700; /* Sfondo dorato */
+    color: #000;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+#menu select:hover, #menu button:hover {
+    background: #FFC107; /* Colore più chiaro al passaggio del mouse */
+    transform: scale(1.1); /* Leggero ingrandimento */
+}
+
+#menu img {
+    margin-top: 10px;
+    border: 3px solid #FFD700; /* Bordo dorato */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Ombra */
+    width: 150px; /* Dimensione fissa */
+}
+
+#controls {
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #FFD700; /* Colore dorato */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Ombra del testo */
 }
