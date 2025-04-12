@@ -1,3 +1,40 @@
+import { terreno } from './caricamento_sfondo.js'; // Importa la matrice terreno
+
+// Mappa delle immagini per i numeri della matrice
+const immaginiTerreno = {
+    1: "percorso_gioco/png/Tiles/18.png", 
+    2: "", 
+    3: "", 
+    4: "percorso_gioco/png/Tiles/2.png", 
+    5: "percorso_gioco/png/Tiles/5.png", 
+};
+
+// Funzione per disegnare il terreno
+function drawTerreno() {
+    const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
+    const offsetX = myGameArea.backgroundX; // Usa lo scorrimento dello sfondo come offset
+
+    for (let row = 0; row < terreno.length; row++) {
+        for (let col = 0; col < terreno[row].length; col++) {
+            const numero = terreno[row][col];
+            const immagineSrc = immaginiTerreno[numero];
+            if (immagineSrc) {
+                const img = new Image();
+                img.src = immagineSrc;
+
+                // Disegna il blocco con l'offset orizzontale
+                myGameArea.context.drawImage(
+                    img,
+                    col * tileSize + offsetX, // Applica l'offset orizzontale
+                    row * tileSize,
+                    tileSize,
+                    tileSize
+                );
+            }
+        }
+    }
+}
+
 // Funzione per avviare il gioco
 function startGame() {
     myGamePiece.loadImages(runningImages, idleImage, jumpImage, deadImage);
@@ -85,15 +122,9 @@ var myGameArea = {
     },
 
     clear: function () {
-        // Disegna lo sfondo con scorrimento
+        // Disegna lo sfondo senza loop
         if (this.background) {
             this.context.drawImage(this.background, this.backgroundX, 0, this.canvas.width, this.canvas.height);
-            this.context.drawImage(this.background, this.backgroundX + this.canvas.width, 0, this.canvas.width, this.canvas.height);
-
-            // Ripristina la posizione dello sfondo per creare un loop continuo
-            if (this.backgroundX <= -this.canvas.width) {
-                this.backgroundX = 0;
-            }
         } else {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
@@ -102,10 +133,17 @@ var myGameArea = {
     updateBackground: function () {
         // Sposta lo sfondo solo se il personaggio ha raggiunto la metà della canvas
         if (myGamePiece.x >= (this.canvas.width / 2) && myGamePiece.imageList == myGamePiece.imageListRunning) {
-            this.backgroundX -= this.backgroundSpeed;
+            // Impedisci lo scorrimento oltre la fine dello sfondo
+            const maxscorrimento = -(this.background.width - this.canvas.width);
+            if (this.backgroundX > maxscorrimento) {
+                this.backgroundX -= this.backgroundSpeed;
+            }
         }
-        if(myGamePiece.x <=80 && myGamePiece.imageList == myGamePiece.imageListRunning && specchia_immagine==true && this.backgroundX < 0){
-            this.backgroundX += this.backgroundSpeed;
+        if (myGamePiece.x <= 80 && myGamePiece.imageList == myGamePiece.imageListRunning && specchia_immagine == true) {
+            // Impedisci lo scorrimento oltre l'inizio dello sfondo
+            if (this.backgroundX < 0) {
+                this.backgroundX += this.backgroundSpeed;
+            }
         }
     },
 
@@ -134,7 +172,9 @@ var myGameArea = {
 };
 
 function updateGameArea() {
-    myGameArea.clear();
+    myGameArea.clear(); // Disegna lo sfondo
+    drawTerreno(); // Disegna il terreno sopra lo sfondo
+
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;
 
@@ -167,19 +207,16 @@ function updateGameArea() {
         }
     }
 
-
-
     // Se nessun tasto è premuto, metti il personaggio in modalità idle
     if (!myGameArea.keys["ArrowLeft"] && !myGameArea.keys["ArrowRight"]) {
         myGamePiece.speedX = 0;
         myGamePiece.imageList = myGamePiece.imageListIdle;
     }
 
-    // Aggiorna lo sfondo
-    myGameArea.updateBackground();
+    myGameArea.updateBackground(); // Aggiorna lo sfondo (scorrimento)
 
-    myGamePiece.update();
-    myGameArea.drawGameObject(myGamePiece);
+    myGamePiece.update(); // Aggiorna la posizione del personaggio
+    myGameArea.drawGameObject(myGamePiece); // Disegna il personaggio sopra il terreno
 }
 
 // Avvia il gioco quando il DOM ha finito di caricarsi
