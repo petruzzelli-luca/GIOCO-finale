@@ -2,11 +2,11 @@ import { terreno } from './caricamento_sfondo.js'; // Importa la matrice terreno
 
 // Mappa delle immagini per i numeri della matrice
 const immaginiTerreno = {
-    1: "percorso_gioco/png/Tiles/18.png", 
-    2: "", 
+    1: "percorso_gioco/png/Tiles/18.png", //sfondo azzurro
+    2: "percorso_gioco/png/Tiles/17.png", //acqua
     3: "", 
-    4: "percorso_gioco/png/Tiles/2.png", 
-    5: "percorso_gioco/png/Tiles/5.png", 
+    4: "percorso_gioco/png/Tiles/2.png", //erba
+    5: "percorso_gioco/png/Tiles/5.png", //terra
 };
 
 // Funzione per disegnare il terreno
