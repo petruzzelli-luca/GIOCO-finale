@@ -97,7 +97,6 @@ var myGameArea = {
     context: null,
     interval: null,
     keys: [], // Array per tenere traccia dei tasti premuti
-    background: null, // Proprietà per lo sfondo
     backgroundX: 0, // Posizione orizzontale dello sfondo
     backgroundSpeed: 1, // Velocità dello sfondo
 
@@ -107,10 +106,6 @@ var myGameArea = {
         this.context = this.canvas.getContext("2d");
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-
-        // Carica l'immagine di sfondo
-        this.background = new Image();
-        this.background.src = "sfondo_gioco (1).jpg"; // Sostituisci con il percorso della tua immagine
 
         this.interval = setInterval(updateGameArea, 8); // Impostato a 8ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
@@ -122,29 +117,8 @@ var myGameArea = {
     },
 
     clear: function () {
-        // Disegna lo sfondo senza loop
-        if (this.background) {
-            this.context.drawImage(this.background, this.backgroundX, 0, this.canvas.width, this.canvas.height);
-        } else {
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        }
-    },
-
-    updateBackground: function () {
-        // Sposta lo sfondo solo se il personaggio ha raggiunto la metà della canvas
-        if (myGamePiece.x >= (this.canvas.width / 2) && myGamePiece.imageList == myGamePiece.imageListRunning) {
-            // Impedisci lo scorrimento oltre la fine dello sfondo
-            const maxscorrimento = -(this.background.width - this.canvas.width);
-            if (this.backgroundX > maxscorrimento) {
-                this.backgroundX -= this.backgroundSpeed;
-            }
-        }
-        if (myGamePiece.x <= 80 && myGamePiece.imageList == myGamePiece.imageListRunning && specchia_immagine == true) {
-            // Impedisci lo scorrimento oltre l'inizio dello sfondo
-            if (this.backgroundX < 0) {
-                this.backgroundX += this.backgroundSpeed;
-            }
-        }
+        // Cancella l'intera canvas senza disegnare lo sfondo
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
     drawGameObject: function (gameObject) {
@@ -172,8 +146,8 @@ var myGameArea = {
 };
 
 function updateGameArea() {
-    myGameArea.clear(); // Disegna lo sfondo
-    drawTerreno(); // Disegna il terreno sopra lo sfondo
+    myGameArea.clear(); // Cancella la canvas
+    drawTerreno(); // Disegna il terreno sopra la canvas
 
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;
@@ -186,24 +160,29 @@ function updateGameArea() {
             myGamePiece.speedX = -1;
             myGamePiece.imageList = myGamePiece.imageListRunning;
             specchia_immagine = true;
+            myGameArea.backgroundX += myGameArea.backgroundSpeed; // Scorri il terreno a destra
         } else if (myGameArea.keys["ArrowRight"]) {
             myGamePiece.imageList = myGamePiece.imageListRunning;
             specchia_immagine = false;
+            myGameArea.backgroundX -= myGameArea.backgroundSpeed; // Scorri il terreno a sinistra
         }
     } else {
-        // Se il personaggio non ha raggiunto metà canvas, può andare a destra o a sinistra
+        // Se il personaggio non ha raggiunto metà canvas
         if (myGameArea.keys["ArrowLeft"]) {
-            // Impedisce al personaggio di andare indietro se x == 80 e specchia_immagine == true
             if (!(myGamePiece.x == 80 && specchia_immagine == true)) {
                 myGamePiece.speedX = -1;
             }
+            if ((myGamePiece.x <= 80 && specchia_immagine == true)) {
+                myGamePiece.speedX = 0;
+                myGameArea.backgroundX += myGameArea.backgroundSpeed; // Scorri il terreno a destra
+            }
             myGamePiece.imageList = myGamePiece.imageListRunning;
             specchia_immagine = true;
-        } 
+        }
         if (myGameArea.keys["ArrowRight"]) {
             myGamePiece.speedX = 1;
             myGamePiece.imageList = myGamePiece.imageListRunning;
-            specchia_immagine = false; 
+            specchia_immagine = false;
         }
     }
 
@@ -212,8 +191,6 @@ function updateGameArea() {
         myGamePiece.speedX = 0;
         myGamePiece.imageList = myGamePiece.imageListIdle;
     }
-
-    myGameArea.updateBackground(); // Aggiorna lo sfondo (scorrimento)
 
     myGamePiece.update(); // Aggiorna la posizione del personaggio
     myGameArea.drawGameObject(myGamePiece); // Disegna il personaggio sopra il terreno
