@@ -4,9 +4,12 @@ import { terreno } from './caricamento_sfondo.js'; // Importa la matrice terreno
 const immaginiTerreno = {
     1: "percorso_gioco/png/Tiles/18.png", //sfondo azzurro
     2: "percorso_gioco/png/Tiles/17.png", //acqua
-    3: "", 
+    3: "percorso_gioco/png/Object/Stone.png", //pietra
     4: "percorso_gioco/png/Tiles/2.png", //erba
     5: "percorso_gioco/png/Tiles/5.png", //terra
+    6: "percorso_gioco/png/Tiles/13.png", //prima parte dell'isola
+    7: "percorso_gioco/png/Tiles/14.png", //parte centrale dell'isola
+    8: "percorso_gioco/png/Tiles/15.png", //parte finale dell'isola
 };
 
 // Funzione per disegnare il terreno
