@@ -49,22 +49,33 @@ var myGamePiece = {
     height: 60,
     x: 10,
     y: 174,
+    gravity: 0.5, // Forza di gravità
+    gravitySpeed: 0, // Velocità verticale influenzata dalla gravità
+    jumpStrength: -11, // Forza del salto
+    isJumping: false, // Stato del salto
     imageList: [],
     imageListRunning: [],
     imageListIdle: [],
     imageListDead: [],
-    imageListJump: [],
     contaFrame: 0,
     actualFrame: 0,
     image: null,
 
     update: function () {
-        // Controlla i bordi della canvas prima di aggiornare la posizione
+        // Aggiorna la posizione orizzontale
         if (this.x + this.speedX > 0 && this.x + this.speedX < myGameArea.canvas.width - this.width) {
             this.x += this.speedX;
         }
-        if (this.y + this.speedY > 0 && this.y + this.speedY < myGameArea.canvas.height - this.height) {
-            this.y += this.speedY;
+
+        // Applica la gravità
+        this.gravitySpeed += this.gravity;
+        this.y += this.speedY + this.gravitySpeed;
+
+        // Impedisce al personaggio di cadere oltre il terreno
+        if (this.y > 174) { // 174 è la posizione del terreno
+            this.y = 174;
+            this.gravitySpeed = 0;
+            this.isJumping = false; // Il personaggio non è più in salto
         }
 
         this.contaFrame++;
@@ -72,6 +83,13 @@ var myGamePiece = {
             this.contaFrame = 0;
             this.actualFrame = (this.actualFrame + 1) % this.imageList.length;
             this.image = this.imageList[this.actualFrame];
+        }
+    },
+
+    jump: function () {
+        if (!this.isJumping) { // Permetti il salto solo se non è già in salto
+            this.gravitySpeed = this.jumpStrength; // Applica la forza del salto
+            this.isJumping = true;
         }
     },
 
@@ -146,39 +164,39 @@ var myGameArea = {
 
 
 var minBackgroundX = 0; // Limite massimo verso sinistra del terreno
-var maxBackgroundX = -(terreno[0].length * 25 - (myGameArea.canvas.width /2 + 25) - myGameArea.canvas.width ); // Limite massimo verso destra del terreno
+var maxBackgroundX = -(terreno[0].length * 25 - 2*(myGameArea.canvas.width)); // Limite massimo verso destra del terreno
 
 function updateGameArea() {
     myGameArea.clear(); // Cancella la canvas
     drawTerreno(); // Disegna il terreno sopra la canvas
 
     myGamePiece.speedX = 0;
-    myGamePiece.speedY = 0;
 
-    // Controlla se il personaggio ha raggiunto la metà della canvas
+    // Controlla se il personaggio deve saltare
+    if (myGameArea.keys["ArrowUp"]) {
+        myGamePiece.jump();
+    }
+
+    // Controlla il movimento orizzontale
     if (myGamePiece.x >= (myGameArea.canvas.width / 2)) {
         myGamePiece.x = myGameArea.canvas.width / 2; // Blocca il personaggio a metà canvas
 
         if (myGameArea.keys["ArrowLeft"]) {
-            // Controlla che il terreno non scorra oltre il limite minimo
             if (myGameArea.backgroundX < minBackgroundX) {
                 myGamePiece.speedX = -1;
                 myGamePiece.imageList = myGamePiece.imageListRunning;
                 specchia_immagine = true;
-                myGameArea.backgroundX += myGameArea.backgroundSpeed; // Scorri il terreno a destra
+                myGameArea.backgroundX += myGameArea.backgroundSpeed;
             }
         } else if (myGameArea.keys["ArrowRight"]) {
-            // Controlla che il terreno non scorra oltre il limite massimo
             if (myGameArea.backgroundX > maxBackgroundX) {
                 myGamePiece.imageList = myGamePiece.imageListRunning;
                 specchia_immagine = false;
-                myGameArea.backgroundX -= myGameArea.backgroundSpeed; // Scorri il terreno a sinistra
+                myGameArea.backgroundX -= myGameArea.backgroundSpeed;
             }
         }
     } else {
-        // Se il personaggio non ha raggiunto metà canvas
         if (myGameArea.keys["ArrowLeft"]) {
-            // Controlla che il terreno non scorra oltre il limite minimo
             if (myGamePiece.x > 0 || myGameArea.backgroundX < minBackgroundX) {
                 if (!(myGamePiece.x == 80 && specchia_immagine == true)) {
                     myGamePiece.speedX = -1;
@@ -186,7 +204,7 @@ function updateGameArea() {
                 if ((myGamePiece.x <= 80 && specchia_immagine == true)) {
                     myGamePiece.speedX = 0;
                     if (myGameArea.backgroundX < minBackgroundX) {
-                        myGameArea.backgroundX += myGameArea.backgroundSpeed; // Scorri il terreno a destra
+                        myGameArea.backgroundX += myGameArea.backgroundSpeed;
                     }
                 }
                 myGamePiece.imageList = myGamePiece.imageListRunning;
@@ -194,7 +212,6 @@ function updateGameArea() {
             }
         }
         if (myGameArea.keys["ArrowRight"]) {
-            // Controlla che il terreno non scorra oltre il limite massimo
             if (myGameArea.backgroundX > maxBackgroundX) {
                 myGamePiece.speedX = 1;
                 myGamePiece.imageList = myGamePiece.imageListRunning;
@@ -212,11 +229,6 @@ function updateGameArea() {
     myGamePiece.update(); // Aggiorna la posizione del personaggio
     myGameArea.drawGameObject(myGamePiece); // Disegna il personaggio sopra il terreno
 }
-
-// Avvia il gioco quando il DOM ha finito di caricarsi
-document.addEventListener("DOMContentLoaded", function () {
-    startGame();
-});
 // Avvia il gioco quando il DOM ha finito di caricarsi
 document.addEventListener("DOMContentLoaded", function () {
     startGame();
