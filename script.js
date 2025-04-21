@@ -10,6 +10,7 @@ const immaginiTerreno = {
     6: "percorso_gioco/png/Tiles/13.png", //prima parte dell'isola
     7: "percorso_gioco/png/Tiles/14.png", //parte centrale dell'isola
     8: "percorso_gioco/png/Tiles/15.png", //parte finale dell'isola
+    9: "moneta.png", //moneta
 };
 
 // Funzione per disegnare il terreno
