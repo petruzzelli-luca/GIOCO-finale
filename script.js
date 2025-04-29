@@ -25,14 +25,9 @@ function drawTerreno() {
             if (immagineSrc) {
                 const img = new Image();
                 img.src = immagineSrc;
-                // Disegna il blocco con l'offset orizzontale
-                myGameArea.context.drawImage(
-                    img,
-                    col * tileSize + offsetX, // Applica l'offset orizzontale
-                    row * tileSize,
-                    tileSize,
-                    tileSize
-                );
+                // Disegna il blocco con in orizzontale
+                myGameArea.context.drawImage(img, col * tileSize + offsetX,  row * tileSize, tileSize, tileSize);
+                 
             }
         }
     }
@@ -170,6 +165,29 @@ var myGameArea = {
 var minBackgroundX = 0; // Limite massimo verso sinistra del terreno
 var maxBackgroundX = -(terreno[0].length * 25 - 2*(myGameArea.canvas.width)); // Limite massimo verso destra del terreno
 
+
+function collisioni() {
+    const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
+    const offsetX = myGameArea.backgroundX; // Usa lo scorrimento dello sfondo come offset
+
+    // Calcola la posizione del personaggio nella matrice
+    const col = Math.floor((myGamePiece.x - offsetX + myGamePiece.width / 2) / tileSize);
+    const row = Math.floor((myGamePiece.y + myGamePiece.height) / tileSize);
+
+    // Verifica se il personaggio è sopra un'isola
+    if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) {
+        const tile = terreno[row][col];
+        if (tile === 6 || tile === 7 || tile === 8) { // Blocchi dell'isola
+            const islandTop = row * tileSize;
+            if (myGamePiece.y + myGamePiece.height > islandTop) {
+                myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra l'isola
+                myGamePiece.gravitySpeed = 0; // Ferma la caduta
+                myGamePiece.isJumping = false; // Il personaggio non è più in salto
+            }
+        }
+    }
+}
+
 function updateGameArea() {
     myGameArea.clear(); // Cancella la canvas
     drawTerreno(); // Disegna il terreno sopra la canvas
@@ -231,6 +249,7 @@ function updateGameArea() {
     }
 
     myGamePiece.update(); // Aggiorna la posizione del personaggio
+    collisioni(); // Controlla la collisione con le isole
     myGameArea.drawGameObject(myGamePiece); // Disegna il personaggio sopra il terreno
 }
 // Avvia il gioco quando il DOM ha finito di caricarsi
