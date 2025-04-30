@@ -10,24 +10,31 @@ const immaginiTerreno = {
     6: "percorso_gioco/png/Tiles/13.png", //prima parte dell'isola
     7: "percorso_gioco/png/Tiles/14.png", //parte centrale dell'isola
     8: "percorso_gioco/png/Tiles/15.png", //parte finale dell'isola
-    9: "moneta.png", //moneta
+    9: "moneta1.png", //moneta
 };
 
 // Funzione per disegnare il terreno
 function drawTerreno() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
     const offsetX = myGameArea.backgroundX; // Usa lo scorrimento dello sfondo come offset
+    const canvasWidth = myGameArea.canvas.width; // Larghezza della canvas
+    const canvasHeight = myGameArea.canvas.height; // Altezza della canvas
 
     for (let row = 0; row < terreno.length; row++) {
         for (let col = 0; col < terreno[row].length; col++) {
             const numero = terreno[row][col];
             const immagineSrc = immaginiTerreno[numero];
+
             if (immagineSrc) {
-                const img = new Image();
-                img.src = immagineSrc;
-                // Disegna il blocco con in orizzontale
-                myGameArea.context.drawImage(img, col * tileSize + offsetX,  row * tileSize, tileSize, tileSize);
-                 
+                const x = col * tileSize + offsetX;
+                const y = row * tileSize;
+
+                // Disegna solo se il blocco è visibile nella canvas
+                if (x + tileSize > 0 && x < canvasWidth && y + tileSize > 0 && y < canvasHeight) {
+                    const img = new Image();
+                    img.src = immagineSrc;
+                    myGameArea.context.drawImage(img, x, y, tileSize, tileSize);
+                }
             }
         }
     }
@@ -35,7 +42,7 @@ function drawTerreno() {
 
 // avvio il gioco
 function startGame() {
-    myGamePiece.loadImages(runningImages, idleImage, jumpImage, deadImage);
+    myGamePiece.loadImages(runningImages, idleImage, deadImage);
     myGameArea.start();
 }
 
@@ -50,7 +57,7 @@ var myGamePiece = {
     y: 174,
     gravity: 0.5, // Forza di gravità
     gravitySpeed: 0, // Velocità verticale influenzata dalla gravità
-    jumpStrength: -11, // Forza del salto
+    jumpStrength: -10, // Forza del salto
     isJumping: false, // Stato del salto
     imageList: [],
     imageListRunning: [],
@@ -123,7 +130,7 @@ var myGameArea = {
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
-        this.interval = setInterval(updateGameArea, 1); // Impostato a 1ms per migliorare il controllo
+        this.interval = setInterval(updateGameArea, 10); // Impostato a 1ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
             myGameArea.keys[e.key] = true;
         });

@@ -35,26 +35,6 @@ var runningImages = [
   ]
 
 
-  var jumpImage =[
-    'santasprites/png/Jump (1).png',
-    'santasprites/png/Jump (2).png',
-    'santasprites/png/Jump (3).png',
-    'santasprites/png/Jump (3).png',
-    'santasprites/png/Jump (4).png',
-    'santasprites/png/Jump (5).png',
-    'santasprites/png/Jump (6).png',
-    'santasprites/png/Jump (7).png',
-    'santasprites/png/Jump (8).png',
-    'santasprites/png/Jump (9).png',
-    'santasprites/png/Jump (10).png',
-    'santasprites/png/Jump (11).png',
-    'santasprites/png/Jump (12).png',
-    'santasprites/png/Jump (13).png',
-    'santasprites/png/Jump (14).png',
-    'santasprites/png/Jump (15).png',
-    'santasprites/png/Jump (16).png'
-  ]
-
 
   var deadImage =[
     'santasprites/png/Dead (1).png',
