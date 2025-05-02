@@ -175,19 +175,19 @@ var maxBackgroundX = -(terreno[0].length * 25 - 2*(myGameArea.canvas.width)); //
 
 function collisioni() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
-    const offsetX = myGameArea.backgroundX; // Usa lo scorrimento dello sfondo come offset
+    const offsetX = myGameArea.backgroundX; // tiene conto dello scorrimento orizzontale dello sfondo che è necessario per calcolare correttamente la posizione del personaggio rispetto alla matrice.
 
     // Calcola la posizione del personaggio nella matrice
     const col = Math.floor((myGamePiece.x - offsetX + myGamePiece.width / 2) / tileSize);
     const row = Math.floor((myGamePiece.y + myGamePiece.height) / tileSize);
 
     // Verifica se il personaggio è sopra un'isola
-    if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) {
-        const tile = terreno[row][col];
-        if (tile === 6 || tile === 7 || tile === 8) { // Blocchi dell'isola
+    if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) { // Controlla se la posizione è valida
+        const tile = terreno[row][col]; // Ottieni il valore della matrice
+        if (tile === 6 || tile === 7 || tile === 8 || tile === 4) { // Blocchi 
             const islandTop = row * tileSize;
-            if (myGamePiece.y + myGamePiece.height > islandTop) {
-                myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra l'isola
+            if (myGamePiece.y + myGamePiece.height > islandTop) { // Controlla se il personaggio è sopra o sotto 
+                myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra 
                 myGamePiece.gravitySpeed = 0; // Ferma la caduta
                 myGamePiece.isJumping = false; // Il personaggio non è più in salto
             }
