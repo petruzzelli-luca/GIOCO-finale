@@ -77,12 +77,7 @@ var myGamePiece = {
         this.gravitySpeed += this.gravity;
         this.y += this.speedY + this.gravitySpeed;
 
-        // Impedisce al personaggio di cadere oltre il terreno
-        if (this.y > 174) { // 174 è la posizione del terreno
-            this.y = 174;
-            this.gravitySpeed = 0;
-            this.isJumping = false; // Il personaggio non è più in salto
-        }
+        
 
         this.contaFrame++;
         if (this.contaFrame == 5) {
@@ -185,7 +180,7 @@ function collisioni() {
     if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) { // Controlla se la posizione è valida
         const tile = terreno[row][col]; // Ottieni il valore della matrice
         if (tile === 6 || tile === 7 || tile === 8 || tile === 4) { // Blocchi 
-            const islandTop = row * tileSize;
+            const islandTop = row * tileSize+10;
             if (myGamePiece.y + myGamePiece.height > islandTop) { // Controlla se il personaggio è sopra o sotto 
                 myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra 
                 myGamePiece.gravitySpeed = 0; // Ferma la caduta
