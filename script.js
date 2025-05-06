@@ -94,7 +94,7 @@ var myGamePiece = {
         }
     },
 
-    loadImages: function (running, idle) {
+    loadImages: function (running, idle, dead) {
         for (let imgPath of running) {
             var img = new Image();
             img.src = imgPath;
@@ -104,6 +104,11 @@ var myGamePiece = {
             var img = new Image();
             img.src = imgPath;
             this.imageListIdle.push(img);
+        }
+        for (let imgPath of dead) {
+            const img = new Image();
+            img.src = imgPath;
+            this.imageListDead.push(img);
         }
         this.image = this.imageListRunning[this.actualFrame];
         this.imageList = this.imageListIdle;
@@ -176,16 +181,20 @@ function collisioni() {
     const col = Math.floor((myGamePiece.x - offsetX + myGamePiece.width / 2) / tileSize);
     const row = Math.floor((myGamePiece.y + myGamePiece.height) / tileSize);
 
-    // Verifica se il personaggio è sopra un'isola
+    // Verifica se il personaggio è sopra un'isola o una roccia
     if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) { // Controlla se la posizione è valida
         const tile = terreno[row][col]; // Ottieni il valore della matrice
+
         if (tile === 6 || tile === 7 || tile === 8 || tile === 4 || tile === 5) { // Blocchi 
-            const islandTop = row * tileSize+10;
+            const islandTop = row * tileSize + 10;
             if (myGamePiece.y + myGamePiece.height > islandTop) { // Controlla se il personaggio è sopra o sotto 
                 myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra 
                 myGamePiece.gravitySpeed = 0; // Ferma la caduta
                 myGamePiece.isJumping = false; // Il personaggio non è più in salto
             }
+        } else if (tile === 3) { // Se il personaggio è sopra una roccia
+            myGamePiece.imageList = myGamePiece.imageListDead; // Cambia l'animazione in quella di morte
+            
         }
     }
 }
