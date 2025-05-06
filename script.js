@@ -1,4 +1,4 @@
-import { terreno } from './caricamento_sfondo.js'; // Importa la matrice terreno
+import { terreno, showGameOverPopup } from './caricamento_sfondo.js'; // Importa la matrice terreno
 
 // Mappa delle immagini per i numeri della matrice
 const immaginiTerreno = {
@@ -179,7 +179,7 @@ function collisioni() {
     // Verifica se il personaggio è sopra un'isola
     if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) { // Controlla se la posizione è valida
         const tile = terreno[row][col]; // Ottieni il valore della matrice
-        if (tile === 6 || tile === 7 || tile === 8 || tile === 4) { // Blocchi 
+        if (tile === 6 || tile === 7 || tile === 8 || tile === 4 || tile === 5) { // Blocchi 
             const islandTop = row * tileSize+10;
             if (myGamePiece.y + myGamePiece.height > islandTop) { // Controlla se il personaggio è sopra o sotto 
                 myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra 
@@ -249,6 +249,16 @@ function updateGameArea() {
         myGamePiece.speedX = 0;
         myGamePiece.imageList = myGamePiece.imageListIdle;
     }
+
+    // Controlla se il personaggio è uscito dalla canvas
+    if (myGamePiece.y > myGameArea.canvas.height) {
+        clearInterval(myGameArea.interval); // Ferma il gioco
+        showGameOverPopup(); // Mostra il popup di Game Over
+    }
+
+    
+
+
 
     myGamePiece.update(); // Aggiorna la posizione del personaggio
     collisioni(); // Controlla la collisione con le isole

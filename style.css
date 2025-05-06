@@ -63,3 +63,55 @@ canvas {
     color: #FFD700; /* Colore dorato */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Ombra del testo */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#gameOverPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    border-radius: 10px;
+    z-index: 1000; /* Assicurati che il popup sia sopra gli altri elementi */
+}
+
+#gameOverPopup h1 {
+    font-size: 2em;
+    color: #FF0000; /* Colore rosso per il testo "Game Over" */
+    margin-bottom: 20px;
+}
+
+#gameOverPopup button {
+    font-size: 1.2em;
+    padding: 10px 20px;
+    background-color: #FFD700; /* Sfondo dorato */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+#gameOverPopup button:hover {
+    background-color: #FFC107; /* Colore più chiaro al passaggio del mouse */
+    transform: scale(1.1); /* Leggero ingrandimento */
+}
