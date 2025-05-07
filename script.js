@@ -46,7 +46,7 @@ function startGame() {
     myGameArea.start();
 }
 
-var specchia_immagine = false; 
+var specchia_immagine = false;
 
 var myGamePiece = {
     speedX: 0,
@@ -77,7 +77,7 @@ var myGamePiece = {
         this.gravitySpeed += this.gravity;
         this.y += this.speedY + this.gravitySpeed;
 
-        
+
 
         this.contaFrame++;
         if (this.contaFrame == 5) {
@@ -130,7 +130,7 @@ var myGameArea = {
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
-        this.interval = setInterval(updateGameArea, 10); // Impostato a 1ms per migliorare il controllo
+        this.interval = setInterval(updateGameArea, 10); // Impostato a 10ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
             myGameArea.keys[e.key] = true;
         });
@@ -170,31 +170,51 @@ var myGameArea = {
 
 
 var minBackgroundX = 0; // Limite massimo verso sinistra del terreno
-var maxBackgroundX = -(terreno[0].length * 25 - 2*(myGameArea.canvas.width)); // Limite massimo verso destra del terreno
+var maxBackgroundX = -(terreno[0].length * 25 - 2 * (myGameArea.canvas.width)); // Limite massimo verso destra del terreno
 
 
 function collisioni() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
-    const offsetX = myGameArea.backgroundX; // tiene conto dello scorrimento orizzontale dello sfondo che è necessario per calcolare correttamente la posizione del personaggio rispetto alla matrice.
+    const offsetX = myGameArea.backgroundX; // Tiene conto dello scorrimento orizzontale dello sfondo
 
     // Calcola la posizione del personaggio nella matrice
     const col = Math.floor((myGamePiece.x - offsetX + myGamePiece.width / 2) / tileSize);
     const row = Math.floor((myGamePiece.y + myGamePiece.height) / tileSize);
 
-    // Verifica se il personaggio è sopra un'isola o una roccia
-    if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) { // Controlla se la posizione è valida
+    // Verifica se il personaggio è sopra una cella della matrice
+    if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) {
         const tile = terreno[row][col]; // Ottieni il valore della matrice
 
-        if (tile === 6 || tile === 7 || tile === 8 || tile === 4 || tile === 5) { // Blocchi 
+        // Controllo collisione verticale (sopra o sotto)
+        if (tile === 6 || tile === 7 || tile === 8 || tile === 4) {
             const islandTop = row * tileSize + 10;
-            if (myGamePiece.y + myGamePiece.height > islandTop) { // Controlla se il personaggio è sopra o sotto 
-                myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra 
+            if (myGamePiece.y + myGamePiece.height > islandTop) {
+                myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra
                 myGamePiece.gravitySpeed = 0; // Ferma la caduta
                 myGamePiece.isJumping = false; // Il personaggio non è più in salto
             }
         } else if (tile === 3) { // Se il personaggio è sopra una roccia
             myGamePiece.imageList = myGamePiece.imageListDead; // Cambia l'animazione in quella di morte
-            
+        }
+
+        // Controllo collisione laterale
+        const leftCol = Math.floor((myGamePiece.x - offsetX) / tileSize); // Colonna a sinistra
+        const rightCol = Math.floor((myGamePiece.x - offsetX + myGamePiece.width) / tileSize); // Colonna a destra
+
+        if (leftCol >= 0 && leftCol < terreno[row].length) {
+            const leftTile = terreno[row][leftCol];
+            if (leftTile === 5 && specchia_immagine == true) {
+                myGamePiece.x = (leftCol + 1) * tileSize + offsetX ; // Posiziona il personaggio a destra del blocco
+                myGamePiece.speedX = 0; // Ferma il movimento orizzontale
+            }
+        }
+
+        if (rightCol >= 0 && rightCol < terreno[row].length) {
+            const rightTile = terreno[row][rightCol];
+            if (rightTile === 5 && specchia_immagine == false) {
+                myGamePiece.x = rightCol * tileSize - myGamePiece.width + offsetX ; // Posiziona il personaggio a sinistra del blocco
+                myGamePiece.speedX = 0; // Ferma il movimento orizzontale
+            }
         }
     }
 }
@@ -265,7 +285,7 @@ function updateGameArea() {
         showGameOverPopup(); // Mostra il popup di Game Over
     }
 
-    
+
 
 
 
