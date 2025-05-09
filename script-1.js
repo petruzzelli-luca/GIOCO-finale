@@ -1,4 +1,4 @@
-import { terreno, showGameOverPopup } from './caricamento_sfondo.js'; // Importa la matrice terreno
+import { terreno1, showGameOverPopup } from './caricamento_sfondo-1.js'; // Importa la matrice terreno
 
 // Mappa delle immagini per i numeri della matrice
 const immaginiTerreno = {
@@ -13,6 +13,8 @@ const immaginiTerreno = {
     9: "moneta1.png", //moneta
 };
 
+// Assicuro che tutte le risorse siano interne e non dipendano da file esterni.
+
 // Funzione per disegnare il terreno
 function drawTerreno() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
@@ -20,9 +22,9 @@ function drawTerreno() {
     const canvasWidth = myGameArea.canvas.width; // Larghezza della canvas
     const canvasHeight = myGameArea.canvas.height; // Altezza della canvas
 
-    for (let row = 0; row < terreno.length; row++) {
-        for (let col = 0; col < terreno[row].length; col++) {
-            const numero = terreno[row][col];
+    for (let row = 0; row < terreno1.length; row++) {
+        for (let col = 0; col < terreno1[row].length; col++) {
+            const numero = terreno1[row][col];
             const immagineSrc = immaginiTerreno[numero];
 
             if (immagineSrc) {
@@ -116,7 +118,7 @@ var myGamePiece = {
 };
 
 var myGameArea = {
-    canvas: document.getElementById("myCanvas"),
+    canvas: document.getElementById("myCanvas1"),
     context: null,
     interval: null,
     keys: [], // Array per tenere traccia dei tasti premuti
@@ -170,7 +172,7 @@ var myGameArea = {
 
 
 var minBackgroundX = 0; // Limite massimo verso sinistra del terreno
-var maxBackgroundX = -(terreno[0].length * 25 - 2 * (myGameArea.canvas.width)); // Limite massimo verso destra del terreno
+var maxBackgroundX = -(terreno1[0].length * 25 - 2 * (myGameArea.canvas.width)); // Limite massimo verso destra del terreno
 
 
 function collisioni() {
@@ -181,8 +183,8 @@ function collisioni() {
     const row = Math.floor((myGamePiece.y + myGamePiece.height) / tileSize);
 
     // Verifica se il personaggio è sopra una cella della matrice
-    if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) {
-        const tile = terreno[row][col]; // Ottieni il valore della matrice
+    if (row >= 0 && row < terreno1.length && col >= 0 && col < terreno1[row].length) {
+        const tile = terreno1[row][col]; // Ottieni il valore della matrice
 
         // Controllo collisione verticale 
         if (tile === 6 || tile === 7 || tile === 8 || tile === 4 ) {
@@ -201,8 +203,8 @@ function collisioni() {
             ? Math.floor((myGamePiece.x + myGamePiece.width - offsetX) / tileSize) // Colonna davanti (destra)
             : Math.floor((myGamePiece.x - offsetX) / tileSize); // Colonna davanti (sinistra)
 
-        if (frontCol >= 0 && frontCol < terreno[row].length) {
-            const frontTile = terreno[row][frontCol];
+        if (frontCol >= 0 && frontCol < terreno1[row].length) {
+            const frontTile = terreno1[row][frontCol];
             if (frontTile === 4) { // Se il blocco davanti è numero 4
                 myGamePiece.speedX = 0; // Ferma il movimento orizzontale
             }
