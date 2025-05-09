@@ -11,6 +11,7 @@ const immaginiTerreno = {
     7: "percorso_gioco/png/Tiles/14.png", //parte centrale dell'isola
     8: "percorso_gioco/png/Tiles/15.png", //parte finale dell'isola
     9: "moneta1.png", //moneta
+    10: "percorso_gioco/png/Tiles/7.png", //erba per le collisioni
 };
 
 // Funzione per disegnare il terreno
@@ -176,7 +177,6 @@ var maxBackgroundX = -(terreno[0].length * 25 - 2 * (myGameArea.canvas.width)); 
 function collisioni() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
     const offsetX = myGameArea.backgroundX; // Tiene conto dello scorrimento orizzontale dello sfondo
-
     // Calcola la posizione del personaggio nella matrice
     const col = Math.floor((myGamePiece.x - offsetX + myGamePiece.width / 2) / tileSize);
     const row = Math.floor((myGamePiece.y + myGamePiece.height) / tileSize);
@@ -185,8 +185,8 @@ function collisioni() {
     if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) {
         const tile = terreno[row][col]; // Ottieni il valore della matrice
 
-        // Controllo collisione verticale (sopra o sotto)
-        if (tile === 6 || tile === 7 || tile === 8 || tile === 4) {
+        // Controllo collisione verticale 
+        if (tile === 6 || tile === 7 || tile === 8 || tile === 4 || tile === 10) {
             const islandTop = row * tileSize + 10;
             if (myGamePiece.y + myGamePiece.height > islandTop) {
                 myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra
@@ -197,22 +197,14 @@ function collisioni() {
             myGamePiece.imageList = myGamePiece.imageListDead; // Cambia l'animazione in quella di morte
         }
 
-        // Controllo collisione laterale
-        const leftCol = Math.floor((myGamePiece.x - offsetX) / tileSize); // Colonna a sinistra
-        const rightCol = Math.floor((myGamePiece.x - offsetX + myGamePiece.width) / tileSize); // Colonna a destra
+        // Controllo collisione frontale con blocco numero 4
+        const frontCol = myGamePiece.speedX > 0
+            ? Math.floor((myGamePiece.x + myGamePiece.width - offsetX) / tileSize) // Colonna davanti (destra)
+            : Math.floor((myGamePiece.x - offsetX) / tileSize); // Colonna davanti (sinistra)
 
-        if (leftCol >= 0 && leftCol < terreno[row].length) {
-            const leftTile = terreno[row][leftCol];
-            if (leftTile === 5 && specchia_immagine == true) {
-                myGamePiece.x = (leftCol + 1) * tileSize + offsetX ; // Posiziona il personaggio a destra del blocco
-                myGamePiece.speedX = 0; // Ferma il movimento orizzontale
-            }
-        }
-
-        if (rightCol >= 0 && rightCol < terreno[row].length) {
-            const rightTile = terreno[row][rightCol];
-            if (rightTile === 5 && specchia_immagine == false) {
-                myGamePiece.x = rightCol * tileSize - myGamePiece.width + offsetX ; // Posiziona il personaggio a sinistra del blocco
+        if (frontCol >= 0 && frontCol < terreno[row].length) {
+            const frontTile = terreno[row][frontCol];
+            if (frontTile === 4) { // Se il blocco davanti è numero 4
                 myGamePiece.speedX = 0; // Ferma il movimento orizzontale
             }
         }
