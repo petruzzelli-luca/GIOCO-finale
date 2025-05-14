@@ -129,7 +129,7 @@ var myGameArea = {
         this.context = this.canvas.getContext("2d");
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-
+        //requestAnimationFrame(updateGameArea);
         this.interval = setInterval(updateGameArea, 10); // Impostato a 10ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
             myGameArea.keys[e.key] = true;
@@ -185,7 +185,7 @@ function collisioni() {
         const tile = terreno[row][col]; // Ottieni il valore della matrice
 
         // Controllo collisione verticale 
-        if (tile === 6 || tile === 7 || tile === 8 || tile === 4 ) {
+        if (tile === 6 || tile === 7 || tile === 8 || tile === 4) {
             const islandTop = row * tileSize + 10;
             if (myGamePiece.y + myGamePiece.height > islandTop) {
                 myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra
@@ -211,6 +211,7 @@ function collisioni() {
 }
 
 function updateGameArea() {
+    myGameArea.context.save(); // Salva lo stato della canvas
     myGameArea.clear(); // Cancella la canvas
     drawTerreno(); // Disegna il terreno sopra la canvas
 
@@ -283,6 +284,9 @@ function updateGameArea() {
     myGamePiece.update(); // Aggiorna la posizione del personaggio
     collisioni(); // Controlla la collisione con le isole
     myGameArea.drawGameObject(myGamePiece); // Disegna il personaggio sopra il terreno
+    myGameArea.context.restore(); // Ripristina lo stato della canvas
+
+    //requestAnimationFrame(updateGameArea);
 }
 // Avvia il gioco quando il DOM ha finito di caricarsi
 document.addEventListener("DOMContentLoaded", function () {
