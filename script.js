@@ -182,22 +182,28 @@ function collisioni() {
     // Verifica se il personaggio è sopra una cella della matrice
     if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) {
         const tile = terreno[row][col]; // Ottieni il valore della matrice
-        const tile2 = terreno[row-1][col];
-        const tile3 = terreno[row-2][col]; 
-        
+        const tile2 = terreno[row - 1][col];
+        const tile3 = terreno[row - 2][col];
+
 
         // Raccogli la moneta
-        if (tile === 9 ) {
+        if (tile === 9) {
             moneteRaccolte++;
             terreno[row][col] = 1; // Sostituisci la moneta con sfondo azzurro
         }
-         if (tile2 === 9 ) {
+        if (tile2 === 9) {
             moneteRaccolte++;
-            terreno[row-1][col] = 1; // Sostituisci la moneta con sfondo azzurro
+            terreno[row - 1][col] = 1; // Sostituisci la moneta con sfondo azzurro
         }
-         if (tile3 === 9 ) {
+        if (tile3 === 9) {
             moneteRaccolte++;
-            terreno[row-2][col] = 1; // Sostituisci la moneta con sfondo azzurro
+            terreno[row - 2][col] = 1; // Sostituisci la moneta con sfondo azzurro
+        }
+
+        if (tile2 === 4) {
+            // il personaggio non può andare avanti
+            myGamePiece.speedX = 0;
+            myGamePiece.x -= 1;
         }
 
         // Controllo collisione verticale 
@@ -212,7 +218,7 @@ function collisioni() {
             myGamePiece.imageList = myGamePiece.imageListDead; // Cambia l'animazione in quella di morte
         }
 
-        
+
     }
 }
 
