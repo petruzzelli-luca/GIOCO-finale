@@ -20,18 +20,22 @@ function showGameOverPopup() {
     popup.id = "gameOverPopup"; // Assegna l'ID per applicare lo stile dal CSS
     popup.innerHTML = `
         <h1>Game Over</h1>
-        <button id="restartButton">Ricomincia</button>
-    `;
+        <button id="restartButton">Ricomincia</button><br>
+        <button id="homeButton">Torna alla Home</button>`;
 
     document.body.appendChild(popup);
 
-    // Aggiungi un listener al pulsante per riavviare il gioco
+    // Listener per ricominciare il gioco
     document.getElementById("restartButton").addEventListener("click", function () {
         document.body.removeChild(popup); // Rimuovi il popup
         location.reload();
     });
-}
 
+    // Listener per tornare alla home
+    document.getElementById("homeButton").addEventListener("click", function () {
+        window.location.href = "index.html";
+    });
+}
 
 
 
