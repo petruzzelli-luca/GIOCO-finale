@@ -186,6 +186,7 @@ function collisioni() {
         const tile3 = terreno[row - 2][col];
 
 
+
         // Raccogli la moneta
         if (tile === 9) {
             moneteRaccolte++;
@@ -200,11 +201,29 @@ function collisioni() {
             terreno[row - 2][col] = 1; // Sostituisci la moneta con sfondo azzurro
         }
 
-        if (tile2 === 4) {
-            // il personaggio non può andare avanti
+        if (tile2 === 4 && specchia_immagine == false) {
+            // Calcola la posizione del bordo destro del blocco 4
+            const tileSize = 25;
+            const offsetX = myGameArea.backgroundX;
+            const bloccoX = (col + 1) * tileSize + offsetX; // col+1 perché tile4 è a destra del personaggio
+
+            // Imposta la posizione del personaggio in modo che il suo bordo destro coincida con il bordo del blocco
+            myGamePiece.x = bloccoX - myGamePiece.width;
             myGamePiece.speedX = 0;
-            myGamePiece.x -= 1;
+        } else if (tile2 === 4 && specchia_immagine == true) {
+            const tileSize = 25;
+            const offsetX = myGameArea.backgroundX;
+            const bloccoX = (col - 1) * tileSize + offsetX + tileSize; // posizione del bordo destro del blocco 4
+
+            // Ferma il personaggio solo se sta per oltrepassare il bordo
+            if (myGamePiece.x < bloccoX) {
+                myGamePiece.x = bloccoX;
+                myGamePiece.speedX = 0;
+            }
         }
+
+
+
 
         // Controllo collisione verticale 
         if (tile === 6 || tile === 7 || tile === 8 || tile === 4) {
@@ -214,11 +233,7 @@ function collisioni() {
                 myGamePiece.gravitySpeed = 0; // Ferma la caduta
                 myGamePiece.isJumping = false; // Il personaggio non è più in salto
             }
-        } else if (tile === 3) { // Se il personaggio è sopra una roccia
-            myGamePiece.imageList = myGamePiece.imageListDead; // Cambia l'animazione in quella di morte
         }
-
-
     }
 }
 
