@@ -13,6 +13,9 @@ const immaginiTerreno = {
     9: "moneta1.png", //moneta
 };
 
+// Variabile per il conteggio delle monete raccolte
+let moneteRaccolte = 0;
+
 // Funzione per disegnare il terreno
 function drawTerreno() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
@@ -76,8 +79,6 @@ var myGamePiece = {
         // Applica la gravità
         this.gravitySpeed += this.gravity;
         this.y += this.speedY + this.gravitySpeed;
-
-
 
         this.contaFrame++;
         if (this.contaFrame == 5) {
@@ -168,10 +169,8 @@ var myGameArea = {
     }
 };
 
-
 var minBackgroundX = 0; // Limite massimo verso sinistra del terreno
 var maxBackgroundX = -(terreno[0].length * 25 - 2 * (myGameArea.canvas.width)); // Limite massimo verso destra del terreno
-
 
 function collisioni() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
@@ -183,6 +182,23 @@ function collisioni() {
     // Verifica se il personaggio è sopra una cella della matrice
     if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) {
         const tile = terreno[row][col]; // Ottieni il valore della matrice
+        const tile2 = terreno[row-1][col];
+        const tile3 = terreno[row-2][col]; 
+        
+
+        // Raccogli la moneta
+        if (tile === 9 ) {
+            moneteRaccolte++;
+            terreno[row][col] = 1; // Sostituisci la moneta con sfondo azzurro
+        }
+         if (tile2 === 9 ) {
+            moneteRaccolte++;
+            terreno[row-1][col] = 1; // Sostituisci la moneta con sfondo azzurro
+        }
+         if (tile3 === 9 ) {
+            moneteRaccolte++;
+            terreno[row-2][col] = 1; // Sostituisci la moneta con sfondo azzurro
+        }
 
         // Controllo collisione verticale 
         if (tile === 6 || tile === 7 || tile === 8 || tile === 4) {
@@ -196,23 +212,13 @@ function collisioni() {
             myGamePiece.imageList = myGamePiece.imageListDead; // Cambia l'animazione in quella di morte
         }
 
-        // Controllo collisione frontale con blocco numero 4
-        const frontCol = myGamePiece.speedX > 0
-            ? Math.floor((myGamePiece.x + myGamePiece.width - offsetX) / tileSize) // Colonna davanti (destra)
-            : Math.floor((myGamePiece.x - offsetX) / tileSize); // Colonna davanti (sinistra)
-
-        if (frontCol >= 0 && frontCol < terreno[row].length) {
-            const frontTile = terreno[row][frontCol];
-            if (frontTile === 4) { // Se il blocco davanti è numero 4
-                myGamePiece.speedX = 0; // Ferma il movimento orizzontale
-            }
-        }
+        
     }
 }
 
 function updateGameArea() {
-    myGameArea.context.save(); // Salva lo stato della canvas
     myGameArea.clear(); // Cancella la canvas
+    myGameArea.context.save(); // Salva lo stato della canvas
     drawTerreno(); // Disegna il terreno sopra la canvas
 
     myGamePiece.speedX = 0;
@@ -277,17 +283,18 @@ function updateGameArea() {
         showGameOverPopup(); // Mostra il popup di Game Over
     }
 
-
-
-
-
     myGamePiece.update(); // Aggiorna la posizione del personaggio
-    collisioni(); // Controlla la collisione con le isole
+    collisioni(); // Controlla la collisione con le isole e raccoglie le monete
     myGameArea.drawGameObject(myGamePiece); // Disegna il personaggio sopra il terreno
-    myGameArea.context.restore(); // Ripristina lo stato della canvas
 
-    //requestAnimationFrame(updateGameArea);
+    // Disegna il contatore delle monete sopra la canvas
+    myGameArea.context.font = "20px Arial";
+    myGameArea.context.fillStyle = "gold";
+    myGameArea.context.fillText("Monete: " + moneteRaccolte, 10, 25);
+
+    myGameArea.context.restore(); // Ripristina lo stato della canvas
 }
+
 // Avvia il gioco quando il DOM ha finito di caricarsi
 document.addEventListener("DOMContentLoaded", function () {
     startGame();
