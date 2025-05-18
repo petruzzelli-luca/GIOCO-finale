@@ -39,4 +39,28 @@ function showGameOverPopup() {
 
 
 
-export { terreno, showGameOverPopup };
+function showWinPopup() {
+    // Rimuovi eventuale popup già presente
+    const oldPopup = document.getElementById("gameOverPopup");
+    if (oldPopup) document.body.removeChild(oldPopup);
+
+    const popup = document.createElement("div");
+    popup.id = "gameOverPopup";
+    popup.innerHTML = `
+        <h1>Congratulazioni, hai vinto!</h1>
+        <button id="winRestartButton">Ricomincia</button><br>
+        <button id="winHomeButton">Torna alla Home</button>
+    `;
+    document.body.appendChild(popup);
+
+    document.getElementById("winRestartButton").addEventListener("click", function () {
+        document.body.removeChild(popup);
+        location.reload();
+    });
+
+    document.getElementById("winHomeButton").addEventListener("click", function () {
+        window.location.href = "index.html";
+    });
+}
+
+export { terreno, showGameOverPopup, showWinPopup };

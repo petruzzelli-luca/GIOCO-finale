@@ -1,5 +1,4 @@
-import { terreno, showGameOverPopup } from './caricamento_sfondo.js'; // Importa la matrice terreno
-
+import { terreno, showGameOverPopup, showWinPopup } from './caricamento_sfondo.js';
 // Mappa delle immagini per i numeri della matrice
 const immaginiTerreno = {
     1: "percorso_gioco/png/Tiles/18.png", //sfondo azzurro
@@ -203,6 +202,13 @@ function collisioni() {
             moneteRaccolte++;
             terreno[row - 2][col] = 1; // Sostituisci la moneta con sfondo azzurro
         }
+
+        if (tile2 === 10 || tile3 === 11 ) {
+    
+        setTimeout(() => {
+            showWinPopup(); // Mostra il popup di vittoria dopo 3 secondi
+        }, 1000);
+    }
 
         if (tile2 === 4 && specchia_immagine == false) {
             // Calcola la posizione del bordo destro del blocco 4
