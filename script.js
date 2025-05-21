@@ -10,9 +10,9 @@ const immaginiTerreno = {
     7: "percorso_gioco/png/Tiles/14.png", //parte centrale dell'isola
     8: "percorso_gioco/png/Tiles/15.png", //parte finale dell'isola
     9: "moneta1.png", //moneta
-    10: "bandiera_di_arrivo_1.png", //bandiera di arrivo 1
-    11: "bandiera_di_arrivo_2.png", //bandiera di arrivo 2
-    12: "bandiera_di_arrivo_3.png", //bandiera di arrivo 3
+    10: "bandiera_arrivo_1.png", //bandiera di arrivo 1
+    11: "bandiera_arrivo_2.png", //bandiera di arrivo 2
+    12: "bandiera_arrivo_3.png", //bandiera di arrivo 3
 };
 
 // Variabile per il conteggio delle monete raccolte
