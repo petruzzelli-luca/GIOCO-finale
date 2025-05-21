@@ -25,7 +25,7 @@ function drawTerreno() {
     const canvasWidth = myGameArea.canvas.width; // Larghezza della canvas
     const canvasHeight = myGameArea.canvas.height; // Altezza della canvas
 
-    for (let row = 0; row < terreno.length; row++) {
+    for (let row = 0; row < terreno2.length; row++) {
         for (let col = 0; col < terreno2[row].length; col++) {
             const numero = terreno2[row][col];
             const immagineSrc = immaginiTerreno[numero];
@@ -172,7 +172,7 @@ var myGameArea = {
 };
 
 var minBackgroundX = 0; // Limite massimo verso sinistra del terreno
-var maxBackgroundX = -(terreno[0].length * 25 - 2 * (myGameArea.canvas.width)); // Limite massimo verso destra del terreno
+var maxBackgroundX = -(terreno2[0].length * 25 - 2 * (myGameArea.canvas.width)); // Limite massimo verso destra del terreno
 
 function collisioni() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
@@ -182,25 +182,25 @@ function collisioni() {
     const row = Math.floor((myGamePiece.y + myGamePiece.height) / tileSize);
 
     // Verifica se il personaggio è sopra una cella della matrice
-    if (row >= 0 && row < terreno.length && col >= 0 && col < terreno[row].length) {
-        const tile = terreno[row][col]; // Ottieni il valore della matrice
-        const tile2 = terreno[row - 1][col];
-        const tile3 = terreno[row - 2][col];
+    if (row >= 0 && row < terreno2.length && col >= 0 && col < terreno2[row].length) {
+        const tile = terreno2[row][col]; // Ottieni il valore della matrice
+        const tile2 = terreno2[row - 1][col];
+        const tile3 = terreno2[row - 2][col];
 
 
 
         // Raccogli la moneta
         if (tile === 9) {
             moneteRaccolte++;
-            terreno[row][col] = 1; // Sostituisci la moneta con sfondo azzurro
+            terreno2[row][col] = 1; // Sostituisci la moneta con sfondo azzurro
         }
         if (tile2 === 9) {
             moneteRaccolte++;
-            terreno[row - 1][col] = 1; // Sostituisci la moneta con sfondo azzurro
+            terreno2[row - 1][col] = 1; // Sostituisci la moneta con sfondo azzurro
         }
         if (tile3 === 9) {
             moneteRaccolte++;
-            terreno[row - 2][col] = 1; // Sostituisci la moneta con sfondo azzurro
+            terreno2[row - 2][col] = 1; // Sostituisci la moneta con sfondo azzurro
         }
 
         if (tile2 === 10 || tile3 === 11 ) {

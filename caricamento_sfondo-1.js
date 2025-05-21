@@ -22,19 +22,47 @@ function showGameOverPopup() {
     popup.id = "gameOverPopup"; // Assegna l'ID per applicare lo stile dal CSS
     popup.innerHTML = `
         <h1>Game Over</h1>
-        <button id="restartButton">Ricomincia</button>
-    `;
+        <button id="restartButton">Ricomincia</button><br>
+        <button id="homeButton">Torna alla Home</button>`;
 
     document.body.appendChild(popup);
 
-    // Aggiungi un listener al pulsante per riavviare il gioco
+    // Listener per ricominciare il gioco
     document.getElementById("restartButton").addEventListener("click", function () {
         document.body.removeChild(popup); // Rimuovi il popup
         location.reload();
+    });
+
+    // Listener per tornare alla home
+    document.getElementById("homeButton").addEventListener("click", function () {
+        window.location.href = "index.html";
     });
 }
 
 
 
+function showWinPopup() {
+    // Rimuovi eventuale popup già presente
+    const oldPopup = document.getElementById("gameOverPopup");
+    if (oldPopup) document.body.removeChild(oldPopup);
 
-export { terreno1, showGameOverPopup };
+    const popup = document.createElement("div");
+    popup.id = "gameOverPopup";
+    popup.innerHTML = `
+        <h1>Congratulazioni, hai vinto!</h1>
+        <button id="winRestartButton">Ricomincia</button><br>
+        <button id="winHomeButton">Torna alla Home</button>
+    `;
+    document.body.appendChild(popup);
+
+    document.getElementById("winRestartButton").addEventListener("click", function () {
+        document.body.removeChild(popup);
+        location.reload();
+    });
+
+    document.getElementById("winHomeButton").addEventListener("click", function () {
+        window.location.href = "index.html";
+    });
+}
+
+export { terreno1, showGameOverPopup, showWinPopup };

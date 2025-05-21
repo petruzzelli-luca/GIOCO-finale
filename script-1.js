@@ -1,5 +1,4 @@
-import { terreno1, showGameOverPopup } from './caricamento_sfondo-1.js'; // Importa la matrice terreno
-
+import { terreno1, showGameOverPopup, showWinPopup } from './caricamento_sfondo-1.js';
 // Mappa delle immagini per i numeri della matrice
 const immaginiTerreno = {
     1: "percorso_gioco/png/Tiles/18.png", //sfondo azzurro
@@ -11,9 +10,13 @@ const immaginiTerreno = {
     7: "percorso_gioco/png/Tiles/14.png", //parte centrale dell'isola
     8: "percorso_gioco/png/Tiles/15.png", //parte finale dell'isola
     9: "moneta1.png", //moneta
+    10: "bandiera_di_arrivo_1.png", //bandiera di arrivo 1
+    11: "bandiera_di_arrivo_2.png", //bandiera di arrivo 2
+    12: "bandiera_di_arrivo_3.png", //bandiera di arrivo 3
 };
 
-// Assicuro che tutte le risorse siano interne e non dipendano da file esterni.
+// Variabile per il conteggio delle monete raccolte
+let moneteRaccolte = 0;
 
 // Funzione per disegnare il terreno
 function drawTerreno() {
@@ -79,8 +82,6 @@ var myGamePiece = {
         this.gravitySpeed += this.gravity;
         this.y += this.speedY + this.gravitySpeed;
 
-
-
         this.contaFrame++;
         if (this.contaFrame == 5) {
             this.contaFrame = 0;
@@ -131,7 +132,7 @@ var myGameArea = {
         this.context = this.canvas.getContext("2d");
 
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-
+        //requestAnimationFrame(updateGameArea);
         this.interval = setInterval(updateGameArea, 10); // Impostato a 10ms per migliorare il controllo
         window.addEventListener('keydown', function (e) {
             myGameArea.keys[e.key] = true;
@@ -170,10 +171,8 @@ var myGameArea = {
     }
 };
 
-
 var minBackgroundX = 0; // Limite massimo verso sinistra del terreno
 var maxBackgroundX = -(terreno1[0].length * 25 - 2 * (myGameArea.canvas.width)); // Limite massimo verso destra del terreno
-
 
 function collisioni() {
     const tileSize = 25; // Dimensione di ogni cella della matrice in pixel
@@ -185,28 +184,63 @@ function collisioni() {
     // Verifica se il personaggio è sopra una cella della matrice
     if (row >= 0 && row < terreno1.length && col >= 0 && col < terreno1[row].length) {
         const tile = terreno1[row][col]; // Ottieni il valore della matrice
+        const tile2 = terreno1[row - 1][col];
+        const tile3 = terreno1[row - 2][col];
+
+
+
+        // Raccogli la moneta
+        if (tile === 9) {
+            moneteRaccolte++;
+            terreno1[row][col] = 1; // Sostituisci la moneta con sfondo azzurro
+        }
+        if (tile2 === 9) {
+            moneteRaccolte++;
+            terreno1[row - 1][col] = 1; // Sostituisci la moneta con sfondo azzurro
+        }
+        if (tile3 === 9) {
+            moneteRaccolte++;
+            terreno1[row - 2][col] = 1; // Sostituisci la moneta con sfondo azzurro
+        }
+
+        if (tile2 === 10 || tile3 === 11 ) {
+    
+        setTimeout(() => {
+            showWinPopup(); // Mostra il popup di vittoria dopo 3 secondi
+        }, 1000);
+    }
+
+        if (tile2 === 4 && specchia_immagine == false) {
+            // Calcola la posizione del bordo destro del blocco 4
+            const tileSize = 25;
+            const offsetX = myGameArea.backgroundX;
+            const bloccoX = (col + 1) * tileSize + offsetX; // col+1 perché tile4 è a destra del personaggio
+
+            // Imposta la posizione del personaggio in modo che il suo bordo destro coincida con il bordo del blocco
+            myGamePiece.x = bloccoX - myGamePiece.width;
+            myGamePiece.speedX = 0;
+        } else if (tile2 === 4 && specchia_immagine == true) {
+            const tileSize = 25;
+            const offsetX = myGameArea.backgroundX;
+            const bloccoX = (col - 1) * tileSize + offsetX + tileSize; // posizione del bordo destro del blocco 4
+
+            // Ferma il personaggio solo se sta per oltrepassare il bordo
+            if (myGamePiece.x < bloccoX) {
+                myGamePiece.x = bloccoX;
+                myGamePiece.speedX = 0;
+            }
+        }
+
+
+
 
         // Controllo collisione verticale 
-        if (tile === 6 || tile === 7 || tile === 8 || tile === 4 ) {
+        if (tile === 6 || tile === 7 || tile === 8 || tile === 4) {
             const islandTop = row * tileSize + 10;
             if (myGamePiece.y + myGamePiece.height > islandTop) {
                 myGamePiece.y = islandTop - myGamePiece.height; // Posiziona il personaggio sopra
                 myGamePiece.gravitySpeed = 0; // Ferma la caduta
                 myGamePiece.isJumping = false; // Il personaggio non è più in salto
-            }
-        } else if (tile === 3) { // Se il personaggio è sopra una roccia
-            myGamePiece.imageList = myGamePiece.imageListDead; // Cambia l'animazione in quella di morte
-        }
-
-        // Controllo collisione frontale con blocco numero 4
-        const frontCol = myGamePiece.speedX > 0
-            ? Math.floor((myGamePiece.x + myGamePiece.width - offsetX) / tileSize) // Colonna davanti (destra)
-            : Math.floor((myGamePiece.x - offsetX) / tileSize); // Colonna davanti (sinistra)
-
-        if (frontCol >= 0 && frontCol < terreno1[row].length) {
-            const frontTile = terreno1[row][frontCol];
-            if (frontTile === 4) { // Se il blocco davanti è numero 4
-                myGamePiece.speedX = 0; // Ferma il movimento orizzontale
             }
         }
     }
@@ -214,6 +248,7 @@ function collisioni() {
 
 function updateGameArea() {
     myGameArea.clear(); // Cancella la canvas
+    myGameArea.context.save(); // Salva lo stato della canvas
     drawTerreno(); // Disegna il terreno sopra la canvas
 
     myGamePiece.speedX = 0;
@@ -278,14 +313,18 @@ function updateGameArea() {
         showGameOverPopup(); // Mostra il popup di Game Over
     }
 
-
-
-
-
     myGamePiece.update(); // Aggiorna la posizione del personaggio
-    collisioni(); // Controlla la collisione con le isole
+    collisioni(); // Controlla la collisione con le isole e raccoglie le monete
     myGameArea.drawGameObject(myGamePiece); // Disegna il personaggio sopra il terreno
+
+    // Disegna il contatore delle monete sopra la canvas
+    myGameArea.context.font = "20px Arial";
+    myGameArea.context.fillStyle = "gold";
+    myGameArea.context.fillText("Monete: " + moneteRaccolte, 10, 25);
+
+    myGameArea.context.restore(); // Ripristina lo stato della canvas
 }
+
 // Avvia il gioco quando il DOM ha finito di caricarsi
 document.addEventListener("DOMContentLoaded", function () {
     startGame();
