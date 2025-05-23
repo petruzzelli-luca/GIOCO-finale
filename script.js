@@ -47,6 +47,11 @@ function drawTerreno() {
 
 // avvio il gioco
 function startGame() {
+    const selectedCharacter = localStorage.getItem('selectedCharacter');
+    const runningImages = selectedCharacter === '1' ? runningImages1 : runningImages2;
+    const idleImage = selectedCharacter === '1' ? idleImage1 : idleImage2;
+    const deadImage = selectedCharacter === '1' ? deadImage1 : deadImage2;
+
     myGamePiece.loadImages(runningImages, idleImage, deadImage);
     myGameArea.start();
 }

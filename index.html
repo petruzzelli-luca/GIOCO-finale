@@ -9,16 +9,40 @@
 <body class="body_index">
     <div class="container">
         <header>
-             <h1>Benvenuto su Super Mario</h1>
-            <p class="subtitle">Scegli il livello di difficoltà e inizia la sfida.</p>
+            <h1>Benvenuto su Super Mario</h1>
+            <p class="subtitle">Scegli il tuo personaggio e il livello di difficoltà.</p>
         </header>
+        <div class="character-selection">
+            <h2>Scegli il tuo personaggio:</h2>
+            <div class="character-buttons">
+                <button onclick="selectCharacter(1)" class="character-btn">Babbo Natale</button>
+                <button onclick="selectCharacter(2)" class="character-btn">Red Hat</button>
+            </div>
+        </div>
         <main>
             <div class="button-group">
-                <button onclick="window.location.href='gioco1.html'">Livello Facile</button>
-                <button onclick="window.location.href='gioco2.html'">Livello Medio</button>
-                <button onclick="window.location.href='gioco3.html'">Livello Difficile</button>
+                <button onclick="startGame('gioco1.html')" disabled id="level1">Livello Facile</button>
+                <button onclick="startGame('gioco2.html')" disabled id="level2">Livello Medio</button>
+                <button onclick="startGame('gioco3.html')" disabled id="level3">Livello Difficile</button>
             </div>
         </main>
     </div>
+    <script>
+        let selectedCharacter = 0;
+        
+        function selectCharacter(char) {
+            selectedCharacter = char;
+            localStorage.setItem('selectedCharacter', char);
+            document.querySelectorAll('.button-group button').forEach(btn => btn.disabled = false);
+            document.querySelectorAll('.character-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+        }
+        
+        function startGame(level) {
+            if(selectedCharacter > 0) {
+                window.location.href = level;
+            }
+        }
+    </script>
 </body>
 </html>
