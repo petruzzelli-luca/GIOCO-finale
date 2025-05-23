@@ -210,7 +210,7 @@ function collisioni() {
         }, 1000);
     }
 
-        if (tile2 === 4 && specchia_immagine == false) {
+        if ((tile2 === 4 || tile2 === 5)&&(specchia_immagine == false)) {
             // Calcola la posizione del bordo destro del blocco 4
             const tileSize = 25;
             const offsetX = myGameArea.backgroundX;
@@ -219,7 +219,7 @@ function collisioni() {
             // Imposta la posizione del personaggio in modo che il suo bordo destro coincida con il bordo del blocco
             myGamePiece.x = bloccoX - myGamePiece.width;
             myGamePiece.speedX = 0;
-        } else if (tile2 === 4 && specchia_immagine == true) {
+        } else if ((tile2 === 4 || tile2 === 5)&&(specchia_immagine == true)) {
             const tileSize = 25;
             const offsetX = myGameArea.backgroundX;
             const bloccoX = (col - 1) * tileSize + offsetX + tileSize; // posizione del bordo destro del blocco 4
