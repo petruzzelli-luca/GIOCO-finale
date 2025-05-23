@@ -9,14 +9,27 @@
 <body class="body_index">
     <div class="container">
         <header>
-            <h1>Benvenuto su Super Mario</h1>
+            <h1>Benvenuto nel gioco di Luca Petruzzelli</h1>
             <p class="subtitle">Scegli il tuo personaggio e il livello di difficoltà.</p>
         </header>
         <div class="character-selection">
             <h2>Scegli il tuo personaggio:</h2>
-            <div class="character-buttons">
-                <button onclick="selectCharacter(1)" class="character-btn">Babbo Natale</button>
-                <button onclick="selectCharacter(2)" class="character-btn">Red Hat</button>
+            <div class="character-cards">
+                <div class="character-card" onclick="selectCharacter(1)">
+                    <img src="santasprites/png/Idle (1).png" alt="Babbo Natale">
+                </div>
+                <div class="character-card" onclick="selectCharacter(2)">
+                    <img src="redhatfiles/png/Idle (1).png" alt="Red Hat">
+                </div>
+                <div class="character-card" onclick="selectCharacter(3)">
+                    <img src="freeknight/png/Idle (1).png" alt="Knight">
+                </div>
+                <div class="character-card" onclick="selectCharacter(4)">
+                    <img src="freedinosprite/png/Idle (1).png" alt="Dino">
+                </div>
+                <div class="character-card" onclick="selectCharacter(5)">
+                    <img src="cutegirlfiles/png/Idle (1).png" alt="Cute Girl">
+                </div>
             </div>
         </div>
         <main>
@@ -34,8 +47,10 @@
             selectedCharacter = char;
             localStorage.setItem('selectedCharacter', char);
             document.querySelectorAll('.button-group button').forEach(btn => btn.disabled = false);
-            document.querySelectorAll('.character-btn').forEach(btn => btn.classList.remove('selected'));
-            event.target.classList.add('selected');
+            document.querySelectorAll('.character-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.character-card').classList.add('selected');
         }
         
         function startGame(level) {

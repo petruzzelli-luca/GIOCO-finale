@@ -48,10 +48,36 @@ function drawTerreno() {
 // avvio il gioco
 function startGame() {
     const selectedCharacter = localStorage.getItem('selectedCharacter');
-    const runningImages = selectedCharacter === '1' ? runningImages1 : runningImages2;
-    const idleImage = selectedCharacter === '1' ? idleImage1 : idleImage2;
-    const deadImage = selectedCharacter === '1' ? deadImage1 : deadImage2;
-
+    let runningImages, idleImage, deadImage;
+    
+    switch(selectedCharacter) {
+        case '1':
+            runningImages = runningImages1;
+            idleImage = idleImage1;
+            deadImage = deadImage1;
+            break;
+        case '2':
+            runningImages = runningImages2;
+            idleImage = idleImage2;
+            deadImage = deadImage2;
+            break;
+        case '3':
+            runningImages = runningImages3;
+            idleImage = idleImage3;
+            deadImage = deadImage3;
+            break;
+        case '4':
+            runningImages = runningImages4;
+            idleImage = idleImage4;
+            deadImage = deadImage4;
+            break;
+        case '5':
+            runningImages = runningImages5;
+            idleImage = idleImage5;
+            deadImage = deadImage5;
+            break;
+    }
+    
     myGamePiece.loadImages(runningImages, idleImage, deadImage);
     myGameArea.start();
 }

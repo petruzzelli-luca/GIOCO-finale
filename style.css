@@ -25,8 +25,9 @@ body {
     padding: 40px 30px;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(60, 60, 120, 0.15);
-    max-width: 400px;
+    max-width: 900px;  /* aumentato da 400px */
     width: 100%;
+    overflow: hidden;
 }
 
 header h1 {
@@ -134,13 +135,16 @@ canvas {
 
 .character-buttons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin: 20px auto;
+    max-width: 800px;
 }
 
 .character-btn {
-    padding: 10px 20px;
+    padding: 15px 25px;
+    min-width: 150px;
     cursor: pointer;
 }
 
@@ -186,4 +190,45 @@ canvas {
 #gameOverPopup button:hover {
     background-color: #FFC107; /* Colore più chiaro al passaggio del mouse */
     transform: scale(1.1); /* Leggero ingrandimento */
+}
+
+.character-cards {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px auto;
+    max-width: 800px;  /* aumentato per contenere tutti i personaggi */
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 0;
+}
+
+.character-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    filter: grayscale(0);
+    opacity: 1;
+}
+
+.character-card:not(.selected) {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    transform: scale(0.9);
+}
+
+.character-card.selected {
+    border: 3px solid #FFD700;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    z-index: 1;
+}
+
+.character-card img {
+    width: 80px;   /* ridotto da 100px */
+    height: 80px;  /* ridotto da 100px */
+    object-fit: contain;
 }
