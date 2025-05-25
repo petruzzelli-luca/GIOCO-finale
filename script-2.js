@@ -13,6 +13,11 @@ const immaginiTerreno = {
     10: "bandiera_arrivo_1.png", //bandiera di arrivo 1
     11: "bandiera_arrivo_2.png", //bandiera di arrivo 2
     12: "bandiera_arrivo_3.png", //bandiera di arrivo 3
+    13: "percorso_gioco/png/Object/Bush (1).png", //cespuglio 1
+    14: "percorso_gioco/png/Object/Bush (3).png", //cespuglio 2
+    15: "percorso_gioco/png/Object/Mushroom_1.png", //fungo 1
+    16: "percorso_gioco/png/Object/Mushroom_2.png", //fungo 2
+    17: "percorso_gioco/png/Object/Sign_2.png", // cartello 1
 };
 
 // Variabile per il conteggio delle monete raccolte
@@ -87,7 +92,7 @@ var specchia_immagine = false;
 var myGamePiece = {
     speedX: 0,
     speedY: 0,
-    width: 60,
+    width: 50,
     height: 60,
     x: 10,
     y: 174,
@@ -248,7 +253,7 @@ function collisioni() {
             const bloccoX = (col + 1) * tileSize + offsetX; // col+1 perché tile4 è a destra del personaggio
 
             // Imposta la posizione del personaggio in modo che il suo bordo destro coincida con il bordo del blocco
-            myGamePiece.x = bloccoX - myGamePiece.width;
+            myGamePiece.x = bloccoX - myGamePiece.width - 10;
             myGamePiece.speedX = 0;
         } else if (tile2 === 4 && specchia_immagine == true) {
             const tileSize = 25;

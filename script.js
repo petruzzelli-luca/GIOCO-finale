@@ -254,7 +254,7 @@ function collisioni() {
             const bloccoX = (col + 1) * tileSize + offsetX; // col+1 perché tile4 è a destra del personaggio
 
             // Imposta la posizione del personaggio in modo che il suo bordo destro coincida con il bordo del blocco
-            myGamePiece.x = bloccoX - myGamePiece.width;
+            myGamePiece.x = bloccoX - myGamePiece.width ;
             myGamePiece.speedX = 0;
         } else if ((tile2 === 4 || tile2 === 5)&&(specchia_immagine == true)) {
             const tileSize = 25;
