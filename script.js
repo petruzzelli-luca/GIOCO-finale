@@ -13,6 +13,12 @@ const immaginiTerreno = {
     10: "bandiera_arrivo_1.png", //bandiera di arrivo 1
     11: "bandiera_arrivo_2.png", //bandiera di arrivo 2
     12: "bandiera_arrivo_3.png", //bandiera di arrivo 3
+    13: "percorso_gioco/png/Object/Bush (1).png", //cespuglio 1
+    14: "percorso_gioco/png/Object/Bush (3).png", //cespuglio 2
+    15: "percorso_gioco/png/Object/Mushroom_1.png", //fungo 1
+    16: "percorso_gioco/png/Object/Mushroom_2.png", //fungo 2
+    17: "percorso_gioco/png/Object/Sign_2.png", // cartello 1
+
 };
 
 // Variabile per il conteggio delle monete raccolte
@@ -278,8 +284,9 @@ function collisioni() {
 }
 
 function updateGameArea() {
-    myGameArea.clear(); // Cancella la canvas
     myGameArea.context.save(); // Salva lo stato della canvas
+    myGameArea.clear(); // Cancella la canvas
+    
     drawTerreno(); // Disegna il terreno sopra la canvas
 
     myGamePiece.speedX = 0;
